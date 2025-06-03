@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui" lang="pt-br">
+<h:head>
+    <title>Gerenciamento de Endereços</title>
+</h:head>
+<h:body>
+	
+    <h:form id="formEndereco">
+			<p:menubar>
+			    <p:menuitem value="Home" 
+			                url="http://localhost:8080/kumulus-cadastro-pessoa/index.xhtml" 
+			                icon="pi pi-home" />
+			    <p:menuitem value="Pessoa" 
+			                url="http://localhost:8080/kumulus-cadastro-pessoa/pessoa.xhtml" 
+			                icon="pi pi-user" />
+			</p:menubar>
+        <p:panel header="Cadastro de Endereço">
+            <p:inputText value="#{enderecoBean.endereco.logradouro}" placeholder="logradouro"/>
+            <p:inputText value="#{enderecoBean.endereco.cidade}" placeholder="Cidade"/>
+            <p:inputText value="#{enderecoBean.endereco.estado}" placeholder="Estado"/>
+						<p:inputText value="#{enderecoBean.endereco.cep}" placeholder="Cep"/>
+						<p:inputText value="#{enderecoBean.endereco.numero}" placeholder="Número"/>
+						<p:selectOneMenu id="pessoa" value="#{enderecoBean.endereco.pessoa}" converter="pessoaConverter">
+						    <f:selectItem itemLabel="-- Selecione --"/>
+						    <f:selectItems value="#{enderecoBean.pessoas}" var="pessoa"
+						                   itemValue="#{pessoa}" itemLabel="#{pessoa.nome}"/>
+						</p:selectOneMenu>
+            <p:commandButton value="#{enderecoBean.update ? 'Editar' : 'Inserir'}" action="#{enderecoBean.salvar}" update="formEndereco" />
+						<p:commandButton rendered="#{enderecoBean.update}" value="Cancel" action="#{enderecoBean.cancelEdit()}" update="formEndereco" />
+        </p:panel>
+
+        <p:dataTable var="e" value="#{enderecoBean.enderecos}" id="dtTableEndereco">
+            <p:column headerText="logradouro">
+                <h:outputText value="#{e.logradouro}"/>
+            </p:column>
+            <p:column headerText="Cidade">
+                <h:outputText value="#{e.cidade}"/>
+            </p:column>
+            <p:column headerText="Estado">
+                <h:outputText value="#{e.estado}"/>
+            </p:column>
+						<p:column headerText="Cep">
+						    <h:outputText value="#{e.cep}"/>
+						</p:column>
+						<p:column headerText="Número">
+						    <h:outputText value="#{e.numero}"/>
+						</p:column>
+						<p:column headerText="Pessoa">
+						    <h:outputText value="#{e.pessoa.nome}"/>
+						</p:column>
+            <p:column headerText="Ações">
+								<p:commandButton value="Editar" action="#{enderecoBean.edit(e)}" icon="pi pi-pencil" update="formEndereco"/>
+                <p:commandButton id="remove" value="Excluir" action="#{enderecoBean.excluir(e.id)}" icon="pi pi-trash"  update="formEndereco dtTableEndereco"  styleClass="ui-button-danger"/>
+            </p:column>
+        </p:dataTable>
+				
+
+    </h:form>
+</h:body>
+
+</html>

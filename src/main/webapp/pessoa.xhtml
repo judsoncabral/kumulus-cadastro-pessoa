@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	 		xmlns:h="http://java.sun.com/jsf/html"
+	  	xmlns:f="http://java.sun.com/jsf/core"
+	 	 	xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Gerenciamento de Pessoas</title>
+</h:head>
+<h:body>
+	
+    <h:form  id="formPessoa">
+			<p:menubar>
+			    <p:menuitem value="Home" 
+			                url="http://localhost:8080/kumulus-cadastro-pessoa/index.xhtml" 
+			                icon="pi pi-home" />
+			    <p:menuitem value="Pessoa" 
+			                url="http://localhost:8080/kumulus-cadastro-pessoa/pessoa.xhtml" 
+			                icon="pi pi-user" />
+			</p:menubar>
+        <p:panel header="Cadastro de Pessoa">
+            <p:inputText value="#{pessoaBean.pessoa.nome}" placeholder="Nome"/>
+            <p:inputText value="#{pessoaBean.pessoa.idade}" placeholder="Idade"/>
+						<p:selectOneMenu id="sexo" value="#{pessoaBean.pessoa.sexo}">
+						    <f:selectItem itemLabel="-- Selecione --"/>
+						    <f:selectItems value="#{pessoaBean.sexoList}" var="sexo"
+						                   itemValue="#{sexo}" itemLabel="#{sexo.descricao}"/>
+						    <p:ajax process="@this"/>
+						</p:selectOneMenu>
+						<p:commandButton value="#{pessoaBean.update ? 'Editar' : 'Inserir'}" action="#{pessoaBean.salvar}" update="formPessoa" />
+						<p:commandButton rendered="#{pessoaBean.update}" value="Cancel" action="#{pessoaBean.cancelEdit()}" update="formPessoa" />
+        </p:panel>
+
+        <p:dataTable var="p" value="#{pessoaBean.pessoas}" id="dtTablePessoa">
+            <p:column headerText="Nome">
+                <h:outputText value="#{p.nome}"/>
+            </p:column>
+            <p:column headerText="Idade">
+                <h:outputText value="#{p.idade}"/>
+            </p:column>
+						<p:column headerText="Sexo">
+						    <h:outputText value="#{p.sexo.descricao}"/>
+						</p:column>
+            <p:column headerText="Ações">
+							<p:commandButton value="Editar" action="#{pessoaBean.edit(p)}" icon="pi pi-pencil" update="formPessoa"/>
+              <p:commandButton value="Excluir" action="#{pessoaBean.excluir(p.id)}" icon="pi pi-trash"  update="formPessoa dtTablePessoa"  styleClass="ui-button-danger"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+</h:body>
+</html>
